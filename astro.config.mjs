@@ -6,6 +6,6 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://utkukaratas.github.io',
-	base: '/utkukaratas.com',
+	// base: '/utkukaratas.com',
 	integrations: [mdx(), sitemap()],
 });
