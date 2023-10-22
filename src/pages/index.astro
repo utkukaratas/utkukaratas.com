@@ -1,0 +1,33 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const text = `{
+
+  :name "M. Utku Karataş"
+
+  :work [ { :company  "<a href='https://hazelcast.com'>Hazelcast</a>"
+            :position "Senior Software Developer" } ]
+
+  :location "SF/CA"
+
+  :email "<a href='mailto:m.utku.k@gmail.com'>m.utku.k@gmail.com</a>"
+
+}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main>
+      <pre set:html={text} />
+    </main>
+    <Footer />
+  </body>
+</html>
