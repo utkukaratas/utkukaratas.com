@@ -23,9 +23,22 @@ const text = `{
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
+
+  <style>
+    main {
+      position: relative;
+    }
+    img {
+      position: absolute;
+      right: 5em;
+      top: 2em;
+    }
+  </style>
+
   <body>
     <Header title={SITE_TITLE} />
     <main>
+      <img src="/utku-profile-photo.jpg" alt="me somehow happy circa 2015" width="64px">
       <pre set:html={text} />
     </main>
     <Footer />
