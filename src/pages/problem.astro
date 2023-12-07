@@ -1,0 +1,129 @@
+---
+
+---
+
+<style>
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  section {
+    font-size: 1em;
+    height: 100vh;
+  }
+  p {
+    /* text-align: center; */
+    /* font-size: 2.2em; */
+    max-width: 80ch;
+  }
+  pre {
+    padding: 0;
+  }
+</style>
+
+<div class="center">
+  <h1>MC Metrics Storage Rewrite</h1>
+  <section>
+    <h1>Problem Statement</h1>
+
+    <p>
+      MC is a Spring application that's basically a control panel / monitoring
+      app for HZ clusters.
+    </p>
+    <p>HZ is an in-memory KV store.</p>
+    <p>
+      A HZ cluster (composed of usually ~ 3 - 100 nodes) emits huge amounts of
+      metrics data for listeners.
+    </p>
+    <p>
+      This data is time series data going back months, even years for some of
+      the customers.
+    </p>
+    <p>
+      Our app needs to keep this data and queries it in the UI (mostly
+      tables/graphs).
+    </p>
+  </section>
+
+  <section>
+    <h1>Success Criteria</h1>
+
+    <p>
+      Ease of install and operation for the customer. They just want to start it
+      up and leave it on some server.
+    </p>
+    <p>
+      MC is a single jar, locally installed app, sometimes even in an intranet
+      setting - without internet access.
+    </p>
+    <p>DX - ease of use for the us the devs.</p>
+  </section>
+
+  <section>
+    <h1>Who were your stakeholders?</h1>
+
+    <p>
+      Paying customers: Large enterprises. Demanding teams. Some even pay the
+      license fees just to use MC.
+    </p>
+    <p>
+      Future team members: Current implementation is quite out of a Java/Spring
+      devs comfort zone.
+    </p>
+  </section>
+
+  <section>
+    <h1>Approach - Tradeoffs that you considered</h1>
+
+    <p>
+      <b>H2/Sqlite</b>: not good for time-series data. Also no binary
+      compatibility guaranteed between versions.
+    </p>
+
+    <p>
+      <b>Clickhouse/InfluxDB</b> etc: out of the question as they would need
+      dedicated setup and maintenance.
+    </p>
+
+    <p><b>Some Cloud db</b>: no way.</p>
+
+    <p>
+      <b>** RocksDB based custom db</b>: this was the status quo I joined the
+      company. It solved the problems above but with downside: hard to extend
+      and maintain, adhoc in-house query api with no sql, etc. OG implementors
+      left the company.
+    </p>
+
+    <p>
+      <b>** QuestDB</b>: this was supposed to be it. Fixes everything we do
+      manually/adhoc:
+    </p>
+    <pre>
+      - embeddable
+      - custom data retention configs
+      - indexes, aggregations, etc. all the sql goodies
+      - a proper db.- out of order writes
+      - good DX for a java dev. (can debug it, has builtin sql browser, simplifies our whole code base)
+    </pre>
+    <p>
+      End result: Spent several man months for a POC and refactoring around the codebase,
+      but in the end the data size turned out to be 2x to 6x larger :( As this
+      is unacceptable, the code was and still should be living in a branch,
+      waiting for its day (better compression story from QuestDB side).
+    </p>
+  </section>
+
+  <section>
+    <h1>Final Impact on your team/organization</h1>
+
+    <p>
+      :sad-pepe-emoji :(Even though it's not deployed in the end, the work
+      resulted in a much needed refactor in the whole system giving hope that
+      one day this will be solved for good.
+    </p>
+  </section>
+</div>
